@@ -14,9 +14,9 @@
 (function() {
     var arr=['http://attach.bbs.miui.com/forum/201311/14/234553f16wj1ejnebtt514.jpg','http://d.hiphotos.baidu.com/zhidao/pic/item/6a63f6246b600c334c3e91cb1e4c510fd9f9a16a.jpg','http://attachments.gfan.com/forum/attachments2/201301/29/125722eh9nj87bq20eq2e8.jpg','http://5b0988e595225.cdn.sohucs.com/images/20180821/847d73ce099e4332af5ce8a1ef6df743.jpeg','http://b-ssl.duitang.com/uploads/item/201509/05/20150905141402_driKX.jpeg']
     var index = Math.floor((Math.random()*arr.length));
-    console.log('ok-2')
+    console.log('ok-1')
     setTimeout(function(){
-        console.log('ok-3')
+        console.log('ok-2')
         console.log(index)
         $('body').ready(function(){
             $('body').prepend('<img id="imgli" />')
