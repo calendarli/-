@@ -6,7 +6,7 @@
 // @author       CalendarLi
 // @match        *://www.google.com/search?*
 // @match        *://www.baidu.com/s?*
-// @grant        none
+// @grant        GM_log
 // @connect      google.com
 // @connect      baidu.com
 // @require      http://cdn.staticfile.org/jquery/2.0.0/jquery.min.js
@@ -22,9 +22,9 @@
     var index = Math.floor((Math.random()*arr.length));
     console.log('ok-1')
     var host = window.location.host;
-    var addimg=function (e){
+    var addimg=function (e,i){
         console.log(e)
-        $('body').prepend('<img id="imgli" />')
+        $(i).prepend('<img id="imgli" />')
         $('#imgli').attr({src:arr[index],style:'position: fixed;opacity: 0.3;'})
     }
     setTimeout(function(){
@@ -32,13 +32,14 @@
         console.log(index)
         $('body').ready(function(){
             if(host==="www.google.com"){
-                addimg('当前为谷歌搜索')
+                addimg('当前为谷歌搜索','body')
                 $('#hdtbSum').attr({style:'opacity: 0.8;'})
                 $('.minidiv').attr({style:'position: fixed;top: 0px;opacity: 0.8;'})
                 $('#footcnt').attr({style:'opacity: 0.6;'})
             }else if(host==="www.baidu.com"){
-                addimg('当前为百度搜索')
+                addimg('当前为百度搜索','#wrapper')
                 $('#rs, div#page>a, div#page>strong').attr({style:'background: none;'})
+                $($('#content_left>div')[0]).removeAttr('class')
             }
         })
 
