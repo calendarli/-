@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         设置搜索界面背景
 // @namespace    http://tampermonkey.net/
-// @version      1.1
+// @version      1.0.3
 // @description  try to take over the world!
 // @author       CalendarLi
 // @match        *://www.google.com/search?*
@@ -13,7 +13,6 @@
 // @connect      baidu.com
 // @require      http://cdn.staticfile.org/jquery/2.0.0/jquery.min.js
 // ==/UserScript==
-
 
 (function() {
     var arr=['http://attach.bbs.miui.com/forum/201311/14/234553f16wj1ejnebtt514.jpg',
@@ -44,6 +43,5 @@
                 $($('#content_left>div')[0]).removeAttr('class')
             }
         })
-
     },10)
 })();
