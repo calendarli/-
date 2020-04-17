@@ -1,11 +1,13 @@
 // ==UserScript==
-// @name         更新谷歌搜索背景
+// @name         设置搜索界面背景
 // @namespace    http://tampermonkey.net/
 // @version      1.1
 // @description  try to take over the world!
 // @author       CalendarLi
 // @match        *://www.google.com/search?*
+// @match        *://google.com/search?*
 // @match        *://www.baidu.com/s?*
+// @match        *://baidu.com/s?*
 // @grant        GM_log
 // @connect      google.com
 // @connect      baidu.com
@@ -31,12 +33,12 @@
         console.log('ok-2')
         console.log(index)
         $('body').ready(function(){
-            if(host==="www.google.com"){
+            if(host==="www.google.com"||host==="google.com"){
                 addimg('当前为谷歌搜索','body')
                 $('#hdtbSum').attr({style:'opacity: 0.8;'})
                 $('.minidiv').attr({style:'position: fixed;top: 0px;opacity: 0.8;'})
                 $('#footcnt').attr({style:'opacity: 0.6;'})
-            }else if(host==="www.baidu.com"){
+            }else if(host==="www.baidu.com"||host==="baidu.com"){
                 addimg('当前为百度搜索','#wrapper')
                 $('#rs, div#page>a, div#page>strong').attr({style:'background: none;'})
                 $($('#content_left>div')[0]).removeAttr('class')
