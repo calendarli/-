@@ -5,14 +5,15 @@
 // @description  try to take over the world!
 // @author       CalendarLi
 // @match        *://www.google.com/search?*
-// @match        *://google.com/search?*
 // @match        *://www.baidu.com/s?*
 // @match        *://baidu.com/s?*
 // @grant        GM_log
 // @connect      google.com
 // @connect      baidu.com
 // @require      http://cdn.staticfile.org/jquery/2.0.0/jquery.min.js
+// @require      https://github.com/calendarli/-/blob/master/Goole-backgrund_img.js
 // ==/UserScript==
+
 
 (function() {
     var arr=['http://attach.bbs.miui.com/forum/201311/14/234553f16wj1ejnebtt514.jpg',
@@ -32,7 +33,7 @@
         console.log('ok-2')
         console.log(index)
         $('body').ready(function(){
-            if(host==="www.google.com"||host==="google.com"){
+            if(host==="www.google.com"){
                 addimg('当前为谷歌搜索','body')
                 $('#hdtbSum').attr({style:'opacity: 0.8;'})
                 $('.minidiv').attr({style:'position: fixed;top: 0px;opacity: 0.8;'})
@@ -43,5 +44,6 @@
                 $($('#content_left>div')[0]).removeAttr('class')
             }
         })
+
     },10)
 })();
