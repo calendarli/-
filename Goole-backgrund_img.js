@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         设置搜索界面背景
 // @namespace    https://github.com/
-// @version      1.0.2
+// @version      1.0.3
 // @updateURL    https://github.com/calendarli/-/blob/master/Goole-backgrund_img.js
 // @downloadURL  https://github.com/calendarli/-/blob/master/Goole-backgrund_img.js
 // @description  try to take over the world!
