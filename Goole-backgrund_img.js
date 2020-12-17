@@ -1,20 +1,11 @@
-// ==UserScript==
-// @name         搜索页面美化
-// @version      2.5.2
-// @description  支持的搜索引擎有1.百度；2.搜狗；3.谷歌；4.必应。  可自由切换背景
-// @author       CalendarLi
-// @match        *://www.google.com/search?*
-// @match        *://www.google.com.hk/search?*
-// @match        *://cn.bing.com/search?*
-// @match        *://www.baidu.com/s?*
-// @match        *://www.sogou.com/web?*
-// @grant        GM_log
-// @connect      google.com
-// @connect      baidu.com
-// @require      http://cdn.staticfile.org/jquery/2.0.0/jquery.min.js
-// @copyright    该脚本完全由 CalendarLi@greasyfork 原创，谢绝抄袭部分或全部代码！如有借鉴代码，请声明并标注脚本链接。
-// ==/UserScript==
-             $(function(){
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+        <title>*</title>
+        <script src="http://cdn.staticfile.org/jquery/2.0.0/jquery.min.js"></script>
+        <script>
+            $(function(){
             /**/
                 if($('.AC-MENU_Btn').length!=0&&!$($('.container-label.baidu input')[0]).is(':checked')){
                     console.log('开启了AC-baidu脚本')
@@ -86,13 +77,13 @@
                 honeySwitch.init = function() {
                     var s = "<span class='slider'></span>";
                     $("[class^=switch]").append(s);
-                    $("[class^=switch]").click(function() {
-                        if ($(this).hasClass("switch-on")) {
-                            $(this).removeClass("switch-on").addClass("switch-off");
-                            setCookie('Cache_ad','switch-off','1')
+                    $("[class^=switch]").on('click',function() {
+                        if ($(this).hasClass("switch-on wifi")) {
+                            $(this).removeClass("switch-on wifi").addClass("switch-off wifi");
+                            setCookie($(this).data('cookiename'),'switch-off wifi','31');
                         } else {
-                            $(this).removeClass("switch-off").addClass("switch-on");
-                            setCookie('Cache_ad','switch-no','1')
+                            $(this).removeClass("switch-off wifi").addClass("switch-on wifi");
+                            setCookie($(this).data('cookiename'),'switch-no wifi','31');
                         }
                     });
                 };
@@ -192,13 +183,23 @@
                     CssVal:'background: none;'
                 },{
                     CssName:'.calendar_text_AD',
-                    CssVal:'position: relative;top: -3px;'
+                    CssVal:'position: relative;top: -3px;font-size: 10px;'
                 },{
                     CssName:'#calendar_div_left',
-                    CssVal:'position: fixed;left:0px;margin-top: 170px;'
+                    CssVal:'position: fixed;left:-100px;margin-top: 170px;z-index: 99;width: 131px;transition: left 0.3s;'
+                },{
+                    CssName:'#calendar_la',
+                    CssVal:'width: 20px; background: #459be6d9; position: absolute; height: 40%; top: 34%; right: 0px; line-height: 116px; color: #fff;padding-left: 10px;opacity: 0.7;transition: opacity 0.3s;'
+                },{
+                    CssName:'.calendar_div_left.calendar_switch p',
+                    CssVal:'display: inline;'
                 }
                 ]}
-            function ans(css){
+                /*
+                *ans(css)
+                *css:用来储存css样式的JSON数据
+                */
+                function ans(css){
                 var len=css["css"].length
                 var styCss='';
                 for(var i=0;i<=len-1;i++){
@@ -206,18 +207,36 @@
                 }
                 return styCss
             }
-                function a(arr,op,ad){
+                function a(arr,op,switchArry){
                     // 图片加载函数
                     var obj=new Image();
                     obj.src=arr;
                     obj.onload=function(){
                         $('body').attr({style:'background-image:url('+this.src+');'})
-                        console.log('背景加载完成')
                         $('#optext')[0].value=op
                         $('.Masklayer').attr({style:'opacity:'+op+';'})
-                        var adww=$('#wifi')[0].className
-                        adww!=ad?$('#wifi').click():'';
+                        for(var i in switchArry){
+                            var adww=$('.wifi')[i].className
+                            adww!=switchArry[i]?$('.wifi')[i].click():'';
+                            console.log('cookie'+i+':'+switchArry[i])
+                        }
+                        /*
+                        *t(name,fun)
+                        *name:开关存在cookie里面的name
+                        *fun：当开关打开时执行的语句 function(){}
+                        */
+                        function t(name,fun){if(name=="switch-no wifi"){fun()}}
 
+                        t(switchArry[0],function(){
+                            //清除右侧推荐栏
+                            console.log('清除右侧推荐栏')
+                            $('#content_right').remove()
+                        })
+                        t(switchArry[1],function(){
+                            //清除Google广告
+                            console.log('清除Google广告')
+                            $('#bottomads,#taw').remove()
+                        })
                     }
                 }
                 //页面加载检测cookie
@@ -226,37 +245,50 @@
                     var username=getCookie("PicturesGrouping");
                     var uservalue=getCookie("PictureTheSubscript");
                     var opa=getCookie('opacity')
-                    var Cache_ad=getCookie('Cache_ad')
-                    if (username!=""&&uservalue!=""&&opa!=''&&Cache_ad!=''){
+                    var Cache_lm=getCookie('Cache_lm')
+                    var Cache_Google_AD=getCookie('Cache_Google_AD')
+                    if (username!=""&&uservalue!=""&&opa!=''&&Cache_lm!=''){
                         //加载图片
                         console.log(opa)
-                        username=='Anime'?a(Anime[uservalue],opa,Cache_ad):a(landscape[uservalue],opa,Cache_ad);
+                        switchArry=[Cache_Google_AD,Cache_lm]
+                        username=='Anime'?a(Anime[uservalue],opa,switchArry):a(landscape[uservalue],opa,Cache_lm);
                     }else{
                         //初始化cookie...
                         console.log('开始初始化..')
-                        setCookie('PictureTheSubscript','0','1');
-                        setCookie('PicturesGrouping','Anime','1')
-                        setCookie('opacity','0.6','1')
-                        setCookie('Cache_ad','switch-on','1')
+                        setCookie('PictureTheSubscript','0','31');
+                        setCookie('PicturesGrouping','Anime','31')
+                        setCookie('opacity','0.6','31')
+                        setCookie('Cache_lm','switch-off wifi','31')
+                        setCookie('Cache_Google_AD','switch-off wifi','31')
+                        console.log('初始化完成')
+                        //初始化完成
                         checkCookie();
                     }
                 }
                 // 设置遮罩层
                 $('body').prepend($('<div id="calendar_div_left">')).prepend('<div class="Masklayer"></div>')
-                $('#calendar_div_left').prepend(
+                $('#calendar_div_left').prepend($('<div id=calendar_la>>')).prepend(
                             $('<div class="calendar_div_left calendar_switch">').prepend(
-                                $('<span class="switch-off" id="wifi">')).append($('<span class="calendar_text_AD">').html('清除广告'))).prepend(
+                                $('<p><span class="switch-off wifi" data-cookiename="Cache_lm">').append($('<span class="calendar_text_AD">').html('删除侧栏')))).prepend(
                         '<div class="calendar_div_left calendar_op"><p>背景透明度</p><input type="text" title="背景透明度0-1"  id="optext" /><div id="opbc" title="遮罩层透明度0-1">保存</div></div>').prepend(
                     '<div class="calendar_div_left calendar_Anime"><div id="Anime">动漫</div><div id="landscape">自然风景</div></div>').prepend(
                     '<div class="calendar_div_left calendar_previous"><div id="previous">上一张</div><div id="next">下一张</div></div>').prepend($('<style>').html(ans(div_css)))
+                $('.calendar_switch').prepend($('<p><span class="switch-off wifi" data-cookiename="Cache_Google_AD">').append($('<span class="calendar_text_AD">').html('清除广告')))
+                
                 //百度
                 $('#rs,.fk i').remove()
                 //必应
                 $('#b_results>li.b_ad').remove()
                 //Google
                 $('#botstuff').remove()
-
                 checkCookie()
+                $('#calendar_div_left').hover(function(){
+                    $(this).attr({style:'left:0px'})
+                    $('#calendar_la').attr({style:'opacity: 0;'})
+                },function(){
+                    $(this).removeAttr('style')
+                    $('#calendar_la').removeAttr('style')
+                })
                 // 点击上一张的函数
                 $('#previous').on('click',function(){
                     //读取下标并转为数字类型
@@ -268,10 +300,10 @@
                     PicturesGrouping=='Anime'?len=Anime.length-1:len=landscape.length-1;
                     // 当下标为0并点击上一张时回到数组的最后一位
                     if(0<PictureTheSubscript){
-                        setCookie('PictureTheSubscript',pi,'1');
+                        setCookie('PictureTheSubscript',pi,'31');
                         checkCookie();
                     }else{
-                        setCookie('PictureTheSubscript',len,'1');
+                        setCookie('PictureTheSubscript',len,'31');
                         checkCookie();
                     }
                 })
@@ -286,21 +318,21 @@
                     // 获取当前数组下标
                     PicturesGrouping=='Anime'?len=Anime.length-1:len=landscape.length-1;
                     if(PictureTheSubscript<len){
-                        setCookie('PictureTheSubscript',pi,'1');
+                        setCookie('PictureTheSubscript',pi,'31');
                         checkCookie();
                     }else{
-                        setCookie('PictureTheSubscript',0,'1');
+                        setCookie('PictureTheSubscript',0,'31');
                         checkCookie();
                     }
                 })
                 $('#Anime').on('click',function(){
-                    setCookie('PictureTheSubscript','0','1');
-                    setCookie('PicturesGrouping','Anime','1')
+                    setCookie('PictureTheSubscript','0','31');
+                    setCookie('PicturesGrouping','Anime','31')
                     checkCookie();
                 })
                 $('#landscape').on('click',function(){
-                    setCookie('PictureTheSubscript','0','1');
-                    setCookie('PicturesGrouping','landscape','1')
+                    setCookie('PictureTheSubscript','0','31');
+                    setCookie('PicturesGrouping','landscape','31')
                     checkCookie();
                 })
                 $('#opbc').on('click',function(){
@@ -309,8 +341,13 @@
                         console.log('输入错误')
                         alert('请输入0-1之间的透明度数值')
                     }else{
-                        setCookie('opacity',al,'1')
+                        setCookie('opacity',al,'31')
                         checkCookie();
                     }
                 })
             })
+        </script>
+    </head>
+<body>
+</body>
+</html>
