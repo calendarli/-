@@ -1,0 +1,27 @@
+{
+  "name": "script",
+  "version": "1.0.0",
+  "description": "",
+  "main": "CL_kzb.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/calendarli/script.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/calendarli/script/issues"
+  },
+  "homepage": "https://github.com/calendarli/script#readme",
+  "dependencies": {
+    "jquery-colpick": "^3.1.0",
+    "ts": "^0.2.2"
+  },
+  "devDependencies": {
+    "@types/jquery": "^3.5.5",
+    "@types/node": "^14.14.25"
+  }
+}
