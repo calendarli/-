@@ -29,7 +29,6 @@
 // @copyright:en   This script is completely original by CalendarLi@greasyfork, please do not copy part or all of the code! If you have reference code, please declare and mark the script link.
 // @copyright:ja   このスクリプトはCalendarLi @ greasyforkによって完全にオリジナルです。コードの一部または全部をコピーしないでください。 参照コードがある場合は、スクリプトリンクを宣言してマークを付けてください。
 // ==/UserScript==
-//待解决：切换分组时会关闭设定选项
 /*========================================如有自定义图片注意备份！！！========================================*/
 /*========================================如有自定义图片注意备份！！！========================================*/
 /*========================================如有自定义图片注意备份！！！========================================*/
