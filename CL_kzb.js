@@ -29,7 +29,6 @@
 // @copyright:en   This script is completely original by CalendarLi@greasyfork, please do not copy part or all of the code! If you have reference code, please declare and mark the script link.
 // @copyright:ja   このスクリプトはCalendarLi @ greasyforkによって完全にオリジナルです。コードの一部または全部をコピーしないでください。 参照コードがある場合は、スクリプトリンクを宣言してマークを付けてください。
 // ==/UserScript==
-//待解决：切换分组时会关闭设定选项
 /*========================================如有自定义图片注意备份！！！========================================*/
 /*========================================如有自定义图片注意备份！！！========================================*/
 /*========================================如有自定义图片注意备份！！！========================================*/
@@ -129,6 +128,8 @@
         window.BackgroundTransparencyNumberValue = CL_LocalStorage.getItem('BackgroundTransparencyNumberValue', '0.4') //背景透明
         window.ListTransparencyNumberValue = CL_LocalStorage.getItem('ListTransparencyNumberValue', '0.6') //列表透明
         window.PureColorBackgroundChecked = CL_LocalStorage.getItem('PureColorBackgroundChecked', false) //自定义纯色背景
+        window.CustomizeUrlValueChecked = CL_LocalStorage.getItem('CustomizeUrlValueChecked', '') //自定义URL值
+        window.CustomizeURLChecked = CL_LocalStorage.getItem('CustomizeURLChecked', false) //自定义URL
         window.CustomBackgroundCode = CL_LocalStorage.getItem('CustomBackgroundCode', '#FFF') //纯色背景代码
         window.RandomPicturesChecked = CL_LocalStorage.getItem('RandomPicturesChecked', false) //随机图片
         window.picGroupSelectValue = CL_LocalStorage.getItem('picGroupSelectValue', 'Anime') //分组
@@ -258,6 +259,15 @@
         },
         'div#b_content': {
             'padding-left': '140px'
+        },
+        'p.Customize.checkboxWrap': {
+            'float': 'left',
+            'margin': '0px',
+            'cursor': 'pointer'
+        },
+        'div#CL_OperationPanel input[type="text"]': {
+            'width': '200px',
+            'margin-top': '4.3px'
         }
 
     };
@@ -273,6 +283,8 @@
                 $('<div class="ChangePicture">').append('<span id="before" class="Button">上一张</span><span id="Rear" class="Button">下一张</span>')
             ).append(
                 $('<div class="DropDownGroup">').append($('<span>切换分组：')).append($('<select class="select" name="picGroup" id="pic-group-selector">'))
+            ).append(
+                $('<div class="CustomizeURL">').append('<div><p class="Customize checkboxWrap" title="可填写图床URL"><input type="checkbox" name="CustomizeURL" value="自定义URL" default="false">自定义URL</p><input type="text" name="CustomizeUrlValue"></div>')
             ).append(
                 $('<div class="transparency">').append(
                     $('<span>').append('背景透明度：')
@@ -290,11 +302,11 @@
             )
         )
     )
-
-    /**
-     * 启用调色器
-     */
-    // @ts-ignore
+    $('#CL_OperationPanel input[name=CustomizeUrlValue]').val(getVariable('CustomizeUrlValueChecked'))
+        /**
+         * 启用调色器
+         */
+        // @ts-ignore
     $(".color-box").colpick({
         colorScheme: "dark",
         layout: "rgbhex",
@@ -366,10 +378,14 @@
         /**
          * 输出背景
          */
-        if (getVariable('RandomPicturesChecked') == true) {
-            obj.src = GroupList[getVariable('picGroupSelectValue')].ImgList[parseInt(Math.random() * getVariable('len') + 1)]
+        if (getVariable('CustomizeURLChecked') == true) {
+            obj.src = getVariable('CustomizeUrlValueChecked')
         } else {
-            obj.src = GroupList[getVariable('picGroupSelectValue')].ImgList[getVariable('PictureURLIndex')];
+            if (getVariable('RandomPicturesChecked') == true) {
+                obj.src = GroupList[getVariable('picGroupSelectValue')].ImgList[parseInt(Math.random() * getVariable('len') + 1)]
+            } else {
+                obj.src = GroupList[getVariable('picGroupSelectValue')].ImgList[getVariable('PictureURLIndex')];
+            }
         }
         /**
          * 输出纯色背景
@@ -502,8 +518,17 @@
             CL_LocalStorage.setItem(key, value);
         });
         /**
-         * 保存自定义颜色代码
+         * 保存text的值
          */
+        $.each($("#CL_OperationPanel input[type=text]"), function(_, item) {
+                var jqDOM = $(item);
+                var key = jqDOM[0].name + "Checked";
+                var value = jqDOM.val();
+                CL_LocalStorage.setItem(key, value);
+            })
+            /**
+             * 保存自定义颜色代码
+             */
         CL_LocalStorage.setItem("CustomBackgroundCode", $(".color-box")[0].style.backgroundColor);
         /**
          * 保存默认图片索引
